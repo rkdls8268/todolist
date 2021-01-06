@@ -14,7 +14,12 @@ const todoSchema = new Schema({
 });
 
 todoSchema.statics.findAll = function () {
-    return todo.readAll();
+    return this.find();
+}
+
+todoSchema.statics.create = function (payload) {
+    const todo = new this(payload);
+    return todo.save();
 }
 
 module.exports = mongoose.model('todo', todoSchema);

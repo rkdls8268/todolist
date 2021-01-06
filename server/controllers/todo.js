@@ -11,6 +11,15 @@ const todo = {
         } catch (err) {
             res.status(500).send(err);
         }
+    },
+    write: async (req, res) => {
+        const todos = await TodoModel.create(req.body);
+        try {
+            // 누락된 값 있으면 fail 해주는 코드 추가
+            res.status(200).send(todos);
+        } catch (err) {
+            res.status(500).send(err);
+        }
     }
 }
 
