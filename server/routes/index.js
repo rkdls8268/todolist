@@ -7,4 +7,6 @@ router.get('/', function(req, res, next) {
   res.send({title: 'Hello react!'});
 });
 
+router.use('/todo', require('./todo'));
+
 module.exports = router;
