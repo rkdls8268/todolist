@@ -4,18 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-
-const mongoClient = require('mongodb').MongoClient;
-const objectId = require('mongodb').ObjectID;
-// 모듈은 mongodb이고 필요한 모듈 변수는 2가지
-// MongoClient, ObjectID 모두 클라이언트로 사용됨
-
-const assert = require('assert');
-// 데이터베이스 로드 시 에러가 나거나 다른 기타 에러가 발생 시 이를 안전하게 처리함
-
-const url = 'mongodb://127.0.0.1:27017';
-const dbName = 'text';
-// 몽고디비에 접속을 하기 위한 정보
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var app = express();
@@ -59,14 +48,13 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-mongoClient.connect(url, {useNewUrlParser: true}, (err, client) => {
-  if (err) {
-    return console.log("Unable to connect to db");
-  }
-  console.log("Connected");
-
-  // db가 없으면 생성, 있으면 조회
-  const db = client.db(dbName);
+// mongoDB 서버 연결
+var db = mongoose.connection;
+db.on('error', console.error);
+db.once('open', function() {
+  console.log("connected to mongod server");
 });
+// connect() 메소드로 서버에 접속을 할 수 있음.
+mongoose.connect('mongodb://localhost/todo');
 
 module.exports = app;
