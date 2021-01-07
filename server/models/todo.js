@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-const todo = require('../controllers/todo');
+
 var Schema = mongoose.Schema;
 
 // Schema: document의 구조가 어떻게 생겼는지 알려주는 역할
@@ -15,6 +15,22 @@ const todoSchema = new Schema({
 
 todoSchema.statics.findAll = function () {
     return this.find();
+}
+
+todoSchema.statics.findOneById = function (id) {
+    if (mongoose.Types.ObjectId.isValid(id)) {
+        this.findOne({"_id":id}, function (err, todo) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (todo==null) {
+                    console.log(todo);
+                }
+            }
+        });
+    }
+    else
+        return null;
 }
 
 todoSchema.statics.create = function (payload) {
