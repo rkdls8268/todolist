@@ -13,29 +13,44 @@ const todoSchema = new Schema({
     collection: 'todos'
 });
 
+// const TodoModel = require('../modules/todo');
+
+// const todo = {
+//     findAll: async () => {
+//         try {
+//             const todos = await TodoModel.find();
+//             return todos;
+//         } catch (err) {
+//             console.log('findAll error: ', err);
+//             throw err;
+//         }
+//     }
+// }
+
+// todoSchema.statics.findAll = function () {
+//     return this.find();
+// }
+
+// statics 말고 methods 사용하면 controllers에서 findAll 인식 못함
 todoSchema.statics.findAll = function () {
     return this.find();
 }
 
 todoSchema.statics.findOneById = function (id) {
+    // cast error 처리
     if (mongoose.Types.ObjectId.isValid(id)) {
-        this.findOne({"_id":id}, function (err, todo) {
-            if (err) {
-                console.log(err);
-            } else {
-                if (todo==null) {
-                    console.log(todo);
-                }
-            }
-        });
+        // return this.findOne({"_id":id});
+        return this.findById(id); // id로 찾는 경우 findById 권장
     }
     else
         return null;
 }
 
-todoSchema.statics.create = function (payload) {
+// methods도 되는데 그 이유는 create()가 Model.create()로 인식되었기 때문
+todoSchema.statics.write = function (payload) {
     const todo = new this(payload);
     return todo.save();
 }
 
 module.exports = mongoose.model('todo', todoSchema);
+// 모듈화 -> require(models/todo); 해서 사용할 수 있음!!!
