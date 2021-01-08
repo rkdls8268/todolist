@@ -34,6 +34,25 @@ const todo = {
         } catch (err) {
             res.status(500).send(err);
         }
+    },
+    updateTodo: async (req, res) => {
+        const todoId = req.params.todoId;
+        const payload = req.body;
+        const todos = await TodoModel.updateTodo(todoId, payload);
+        try {
+            res.status(200).send(todos);
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    },
+    deleteTodo: async (req, res) => {
+        const todoId = req.params.todoId;
+        const todos = await TodoModel.deleteTodo(todoId);
+        try {
+            res.status(200).send(todos);
+        } catch (err) {
+            res.status(500).send(err);
+        }
     }
 }
 

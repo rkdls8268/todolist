@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-
+mongoose.set('useFindAndModify', false);
 var Schema = mongoose.Schema;
 
 // Schema: document의 구조가 어떻게 생겼는지 알려주는 역할
@@ -50,6 +50,16 @@ todoSchema.statics.findOneById = function (id) {
 todoSchema.statics.write = function (payload) {
     const todo = new this(payload);
     return todo.save();
+}
+
+todoSchema.statics.updateTodo = function (todoId, payload) {
+    console.log("payload:", payload);
+    console.log("todoId: ", todoId);
+    return this.findOneAndUpdate({"_id": todoId}, {"content": payload.content, "completed": payload.completed});
+}
+
+todoSchema.statics.deleteTodo = function (todoId) {
+    return this.findOneAndDelete({"_id": todoId});
 }
 
 module.exports = mongoose.model('todo', todoSchema);
